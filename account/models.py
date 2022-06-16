@@ -10,7 +10,8 @@ class User(AbstractUser):
         ('OTHERS','OTHERS'),
     ]
     
-    display_photo = models.ImageField(upload_to='photos/%Y/%m/%d/')
+    display_photo = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True ,null=True)
+    cover_photo = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True ,null=True)
     gender = models.CharField(choices=GENDER ,max_length=250, blank=True ,null=True)
     about = models.TextField(max_length=200, blank=True ,null=True)
     dob = models.DateField(default=date.today, blank=True, null=True)

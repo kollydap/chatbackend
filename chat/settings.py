@@ -20,6 +20,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary_storage',
     'cloudinary',
+    # 'rest_auth',
+    'dj_rest_auth',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +122,14 @@ CORS_ALLOWED_ORIGINS = [
     "https://kollybox.netlify.app"
   
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework.authentication.TokenAuthentication',
+    )  
+}
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'kollydap',
     'API_KEY': '127485277254446',

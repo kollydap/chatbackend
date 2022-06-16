@@ -2,6 +2,8 @@ from rest_framework import status
 from .models import User,FriendList,FriendRequest
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer,FriendListSerializer,FriendRequestSerializer,RegistrationSerializer  
 
 @api_view(['GET',])
@@ -13,6 +15,7 @@ def friend_list(request):
 # todo: work on making the friendlist show names of friends instead of id from the serializer
 
 @api_view(['GET',])
+@permission_classes((IsAuthenticated,))
 def get_user(request):
     try:
         user = request.user
@@ -26,6 +29,15 @@ def get_all_user(request):
     try:
         users = User.objects.all()
         serializer_data = [UserSerializer(user).data for user in users]
+        return Response(serializer_data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND) 
+    
+@api_view(['GET',])
+def get_a_user(request,pk):
+    try:
+        user= User.objects.get(id=pk)
+        serializer_data = UserSerializer(user).data
         return Response(serializer_data)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)  
@@ -88,7 +100,7 @@ def create_user(request):
     data = {}
     if serializer_data.is_valid():
         account=serializer_data.save()
-        data['response'] = "successfully registered a anew user."
+        data['response'] = "successfully registered a a new user."
         data['email']=account.email
         data['username']=account.username
         

@@ -22,13 +22,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
     serializers.CharField
     class Meta:
         model = User
-        fields = ['email','username','password','password2']
+        fields = ['email','username','password','password2','first_name','last_name']
         extra_kwargs = {
             'password':{'write_only':True}
         }
         
     def save(self):
         user = User(
+            first_name=self.validated_data['first_name'],
+            last_name=self.validated_data['last_name'],
             email=self.validated_data['email'],
             username=self.validated_data['username'],
         )

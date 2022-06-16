@@ -53,7 +53,7 @@ def create_reaction(request,pk):
 # *---------------------------------RETRIEVE---------------------------------------------*#
 @api_view(['GET',])
 def get_all_posts(request):
-    post= Post.objects.all()
+    post= Post.objects.all().order_by('-published_date')
     serializer_data=[PostSerializer(p).data for p in post]
     return Response(serializer_data)
 
