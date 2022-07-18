@@ -26,12 +26,12 @@ def get_user(request):
          
 @api_view(['GET',])
 def get_all_user(request):
-    try:
-        users = User.objects.all()
-        serializer_data = [UserSerializer(user).data for user in users]
-        return Response(serializer_data)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND) 
+    user= request.user
+    all_users = User.objects.all()
+    user_friend_list = FriendList.objects.get(user=user).friends
+    serializer_data=[UserSerializer(this_user).data for this_user in all_users if this_user not in user_friend_list.all()]
+    return Response(serializer_data)
+            
     
 @api_view(['GET',])
 def get_a_user(request,pk):
@@ -52,14 +52,25 @@ def get_user_friend_request_list(request):
     return Response(serializer_data)
 # todo: work on making the friendlist show names of friends instead of id from the serializer
 
+@api_view(['GET',])
+def get_user_friend_list(request,pk):
+    user= User.objects.get(id=pk)
+    user_friendlist = FriendList.objects.all().filter(user=user)
+    serializer_data = [FriendListSerializer(user_friend).data for user_friend in user_friendlist]
+    return Response(serializer_data)
+    
+    
     
 @api_view(['POST',]) 
+@permission_classes((IsAuthenticated,))
 def send_friend_request(request,pk):
     sender = request.user
-    receiver = User.objects.get(id = pk)
+    receiver = User.objects.get(id=pk)
     # friend_request = FriendRequest.objects.create(sender = sender, receiver=receiver)
     friend_request = FriendRequest(sender=sender, receiver=receiver)
     serializer_data = FriendRequestSerializer(friend_request,data=request.data)
+    
+
     if serializer_data.is_valid():
         serializer_data.save()
         # check serializer.data()
@@ -103,9 +114,10 @@ def create_user(request):
         data['response'] = "successfully registered a a new user."
         data['email']=account.email
         data['username']=account.username
-        
     else:
         data = serializer_data.errors
+        
+    
     return Response(data)
     
 

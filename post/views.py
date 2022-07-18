@@ -1,5 +1,3 @@
-from xml.etree.ElementTree import Comment
-from requests import post
 from rest_framework import generics,status
 from account.models import User
 from .models import Post,PostComment,PostPictures,Reaction,CommentComment
@@ -23,11 +21,12 @@ def create_post(request):
 def create_comment(request,pk):
     post = Post.objects.get(id=pk)
     author = request.user
-    comment = PostComment(post=post, author=author)
+    comment = PostComment(post=post, author=author )
     serializer_data= PostCommentSerializer(comment, data=request.data)
     if serializer_data.is_valid():
         serializer_data.save()
         return Response(serializer_data.data,status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST',])
 def create_comment_comment(request,pk):

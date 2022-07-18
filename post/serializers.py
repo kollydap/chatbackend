@@ -1,3 +1,4 @@
+from requests import post
 from rest_framework import serializers
 from account.serializers import UserSerializer
 from .models import Post,PostComment,PostPictures,Reaction,CommentComment
@@ -5,10 +6,11 @@ from .models import Post,PostComment,PostPictures,Reaction,CommentComment
 
         
 class PostCommentSerializer(serializers.ModelSerializer):
+    # author = UserSerializer(requred=False)
+    # post = PostSerializer(required=False)
     class Meta:
         model = PostComment
         fields = '__all__' 
-        
 class ReactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reaction
@@ -20,7 +22,6 @@ class PostPictureSerializer(serializers.ModelSerializer):
         fields = '__all__' 
         
 class CommentCommentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CommentComment
         fields = '__all__' 
@@ -34,3 +35,6 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__' 
+        
+
+        

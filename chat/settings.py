@@ -9,7 +9,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "corsheaders",
-    'account',
+    'account.apps.AccountConfig',
     'post',
     'rest_framework',
     'django.contrib.admin',
@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     # 'rest_auth',
-    'dj_rest_auth',
+    'dj_rest_auth',  
     'rest_framework.authtoken',
 ]
 
@@ -119,7 +119,9 @@ MEDIA_URL = '/media/'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://kollybox.netlify.app"
+    "https://kollybox.netlify.app",
+    "https://textie.netlify.app",
+    
   
 ]
 REST_FRAMEWORK = {

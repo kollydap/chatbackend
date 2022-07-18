@@ -1,18 +1,20 @@
-from asyncore import write
 from rest_framework import serializers
 from .models import User, FriendList, FriendRequest
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__' 
+        fields = ['username','id','first_name','last_name','email','display_photo','cover_photo','dob','about','last_login','date_joined','gender'] 
         
 class FriendListSerializer(serializers.ModelSerializer):
+    friends = UserSerializer(read_only = True, many=True)
     class Meta:
         model = FriendList
         fields = '__all__' 
         
 class FriendRequestSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(required=False)
+    receiver = UserSerializer(required=False)
     class Meta:
         model = FriendRequest
         fields = '__all__' 
